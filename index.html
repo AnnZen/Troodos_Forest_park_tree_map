@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoTIFF Image on Leaflet</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        #map { height: 100vh; }
+        #map-title {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        #info-table {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+        #info-table table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        #info-table th, #info-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        #info-table th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+        /* New table style for tree species */
+        #species-table {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            width: 200px; /* Control the table width */
+        }
+        #species-table table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        #species-table th, #species-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        #species-table th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<div id="map-title">Tree cover map of Troodos</div>
+
+<div id="map"></div>
+
+<div id="info-table">
+    <table>
+        <thead>
+            <tr>
+                <th>Map Information</th>
+                <th>Zenonos et al. 2024</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>CRS</td>
+                <td>EPSG:3857</td>
+            </tr>
+            <tr>
+                <td>Used Methodology</td>
+                <td>Tree Segmentation</td>
+            </tr>
+            <tr>
+                <td>Raw Data Resolution</td>
+                <td>10 cm per pixel</td>
+            </tr>
+            <tr>
+                <td>Map Pixel Size</td>
+                <td>1 meter</td>
+            </tr>
+            <tr>
+                <td>Extent</td>
+                <td>182500, 360000 - 195000, 369500</td>
+            </tr>
+            <tr>
+                <td>Number of Trees in the Region</td>
+                <td>927,562</td>
+            </tr>
+            <tr>
+                <td>Area Covered by Tree Crowns</td>
+                <td>16.38 sq.km</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- New Table for Dominant Tree Species -->
+<div id="species-table">
+    <table>
+        <thead>
+            <tr>
+                <th>Dominant Tree Species</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Pinus brutia</td>
+            </tr>
+            <tr>
+                <td>Pinus nigra</td>
+            </tr>
+            <tr>
+                <td>Juniperus spp.</td>
+            </tr>
+            <tr>
+                <td>Quercus alnifolia</td>
+            </tr>
+            <tr>
+                <th>Forest Type Percentages</th>
+            </tr>
+            <tr>
+                <td>85% Coniferous</td>
+            </tr>
+            <tr>
+                <td>15% Broad-leaved</td>
+            </tr>
+
+        </tbody>
+    </table>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    // Initialize the map
+    var map = L.map('map', {
+        center: [35.2680, 33.2994], // Center near the middle of your bounds
+        zoom: 10,
+        minZoom: 8,
+        maxZoom: 20
+    });
+
+    // Define the refined bounds
+    var bounds = [
+        [35.23, 33.25], // Adjusted southwest corner
+        [35.30, 33.35]  // Adjusted northeast corner
+    ];
+
+    // Add the image overlay
+    L.imageOverlay("Troodos_map_1m_repr.png", bounds).addTo(map);
+
+    // Restrict the map view to the image's bounds
+    map.setMaxBounds(bounds);
+</script>
+
+</body>
+</html>
+
